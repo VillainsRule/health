@@ -1,0 +1,3 @@
+searchtify: PASS
+AppleMusic: PASS
+YoutubeMusic: PASS
