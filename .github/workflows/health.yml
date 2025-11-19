@@ -1,0 +1,35 @@
+name: health check
+
+on:
+  workflow_dispatch:
+  schedule:
+  - cron: 0 8 * * *
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: check health
+        run: |
+          chmod +x health.sh
+          ./health.sh
+
+      - name: commit health results
+        run: |
+          FILES_CHANGED=$(git status --porcelain ./ | wc -l | xargs)
+          if [ "$FILES_CHANGED" -gt 0 ]; then
+            git config --global user.name "yolkbot"
+            git config --global user.email "octocat@nowhere.com"
+            git add .
+            git commit -m "health monitor has updated...uh oh?"
+            git push origin master
+          fi
