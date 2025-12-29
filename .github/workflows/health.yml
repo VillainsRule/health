@@ -27,7 +27,7 @@ jobs:
         run: |
           FILES_CHANGED=$(git status --porcelain ./ | wc -l | xargs)
           if [ "$FILES_CHANGED" -gt 0 ]; then
-            git config --global user.name "yolkbot"
+            git config --global user.name "octocat"
             git config --global user.email "octocat@nowhere.com"
             git add .
             git commit -m "health monitor has updated...uh oh?"
