@@ -7,7 +7,7 @@ check() {
 
   git clone "$repo"
   out="$(bun "$test" 2>/dev/null)"
-  if printf "%s" "$out" | grep -q "works!"; then
+  if printf "%s" "$out" | grep -q "works!" && ! printf "%s" "$out" | grep -q "Error"; then
     result="PASS"
   else
     result="FAIL"
