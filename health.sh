@@ -6,11 +6,12 @@ check() {
   test="$3"
 
   git clone "$repo"
-  out="$(bun "$test" 2>/dev/null)"
+  out="$(bun "$test" 2>&1)"
   if printf "%s" "$out" | grep -q "works!" && ! printf "%s" "$out" | grep -q "Error"; then
     result="PASS"
   else
     result="FAIL"
+    printf "%s\n" "$out" >&2
   fi
   rm -rf "$name"
   printf "%s: %s\n" "$name" "$result" >> health.txt
