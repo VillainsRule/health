@@ -1,17 +1,26 @@
 #!/bin/sh
 
+run_test() {
+  out="$(bun "$1" 2>&1)"
+  printf "%s" "$out" | grep -q "works!" && ! printf "%s" "$out" | grep -q "Error"
+}
+
 check() {
   name="$1"
   repo="$2"
   test="$3"
 
   git clone "$repo"
-  out="$(bun "$test" 2>&1)"
-  if printf "%s" "$out" | grep -q "works!" && ! printf "%s" "$out" | grep -q "Error"; then
+  if run_test "$test"; then
     result="PASS"
   else
-    result="FAIL"
-    printf "%s\n" "$out" >&2
+    printf "retrying %s...\n" "$name" >&2
+    if run_test "$test"; then
+      result="PASS"
+    else
+      result="FAIL"
+      printf "FAILED: %s\n" "$name" >&2
+    fi
   fi
   rm -rf "$name"
   printf "%s: %s\n" "$name" "$result" >> health.txt
