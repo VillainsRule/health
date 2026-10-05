@@ -1,3 +1,3 @@
-searchtify: PASS
-AppleMusic: PASS
-YoutubeMusic: PASS
+searchtify: FAIL
+AppleMusic: FAIL
+YoutubeMusic: FAIL
